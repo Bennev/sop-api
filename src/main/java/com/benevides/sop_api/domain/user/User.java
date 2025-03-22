@@ -23,12 +23,12 @@ public class User implements UserDetails {
     private UUID id;
 
     private String name;
-    private String email;
+    private String login;
     private String password;
 
-    public User(String name, String email, String password){
+    public User(String name, String login, String password){
         this.name = name;
-        this.email = email;
+        this.login = login;
         this.password = password;
     }
 
@@ -44,6 +44,6 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return login;
     }
 }

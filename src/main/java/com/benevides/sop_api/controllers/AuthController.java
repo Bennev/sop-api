@@ -27,9 +27,9 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping()
+    @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthDTO data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(),data.password());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
@@ -39,10 +39,10 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
+        if(this.userRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        User newUser = new User(data.name(), data.email(), encryptedPassword);
+        User newUser = new User(data.name(),data.login(),encryptedPassword);
 
         this.userRepository.save(newUser);
 
