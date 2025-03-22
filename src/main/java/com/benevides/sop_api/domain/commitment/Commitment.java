@@ -26,4 +26,10 @@ public class Commitment {
     @ManyToOne
     @JoinColumn(name = "expense_id")
     private Expense expense;
+
+    public Commitment(Date date, float value, String note) {
+        this.date = date;
+        this.value = value;
+        this.note = note;
+    }
 }
