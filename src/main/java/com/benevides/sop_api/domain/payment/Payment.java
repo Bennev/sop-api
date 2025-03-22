@@ -1,0 +1,29 @@
+package com.benevides.sop_api.domain.payment;
+
+import com.benevides.sop_api.domain.commitment.Commitment;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Date;
+import java.util.UUID;
+
+@Table(name = "payment")
+@Entity(name = "payment")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class Payment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    private Date date;
+    private float value;
+    private String note;
+
+    @ManyToOne
+    @JoinColumn(name = "commitment_id")
+    private Commitment commitment;
+}
