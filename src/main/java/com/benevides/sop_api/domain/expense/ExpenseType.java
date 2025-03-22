@@ -1,9 +1,9 @@
 package com.benevides.sop_api.domain.expense;
 
 public enum ExpenseType {
-    BUILDING_CONSTRUCTION("building_construction"),
-    ROAD_CONSTRUCTION("road_construction"),
-    OTHERS("others");
+    BUILDING_CONSTRUCTION("BUILDING_CONSTRUCTION"),
+    ROAD_CONSTRUCTION("ROAD_CONSTRUCTION"),
+    OTHERS("OTHERS");
 
     private String type;
 
