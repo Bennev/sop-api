@@ -6,6 +6,7 @@ import com.benevides.sop_api.domain.payment.Payment;
 import com.benevides.sop_api.repositories.PaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public class PaymentService {
     @Autowired
     private CommitmentService commitmentService;
 
-    public List<Payment> findAllByCommitment_Id(UUID commitment_id) {
-        return paymentRepository.findAllByCommitment_Id(commitment_id);
+    public List<Payment> findAllByCommitmentId(UUID commitment_id) {
+        return paymentRepository.findAllByCommitmentId(commitment_id);
     }
 
     public Payment findById(UUID id) {
@@ -29,6 +30,13 @@ public class PaymentService {
 
     public Payment create(CreatePaymentDTO data) {
         Commitment commitment = commitmentService.findById(data.commitment_id());
+
+        float totalPayments = paymentRepository.sumPaymentsByCommitmentId(commitment.getId());
+
+        if(totalPayments + data.value() > commitment.getValue()) {
+            throw new DataIntegrityViolationException("The total value of payments exceeds the commitment value");
+        }
+
         Payment payment = new Payment(data.date(), data.value(), data.note());
         payment.setCommitment(commitment);
 

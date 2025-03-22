@@ -19,7 +19,7 @@ public class PaymentController {
 
     @GetMapping("/commitment/{commitment_id}")
     public ResponseEntity<List<Payment>> findAllByCommitmentId(@PathVariable UUID commitment_id) {
-        List<Payment> payments = paymentService.findAllByCommitment_Id(commitment_id);
+        List<Payment> payments = paymentService.findAllByCommitmentId(commitment_id);
         return ResponseEntity.ok(payments);
     }
 

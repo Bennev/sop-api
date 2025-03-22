@@ -33,6 +33,13 @@ public class CommitmentService {
 
     public Commitment create(CreateCommitmentDTO data) {
         Expense expense = expenseService.findById(data.expense_id());
+
+        float totalCommitments = commitmentRepository.sumCommitmentsByExpenseId(expense.getId());
+
+        if(totalCommitments + data.value() > expense.getValue()) {
+            throw new DataIntegrityViolationException("The total value of commitments exceeds the expense value");
+        }
+
         Commitment commitment = new Commitment(data.date(), data.value(), data.note());
         commitment.setExpense(expense);
 
