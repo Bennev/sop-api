@@ -4,10 +4,12 @@ import com.benevides.sop_api.domain.user.AuthDTO;
 import com.benevides.sop_api.domain.user.LoginResponseDTO;
 import com.benevides.sop_api.domain.user.RegisterDTO;
 import com.benevides.sop_api.domain.user.User;
+import com.benevides.sop_api.infra.GlobalErrorMessage;
 import com.benevides.sop_api.infra.security.TokenService;
 import com.benevides.sop_api.repositories.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,15 +33,18 @@ public class AuthController {
     public ResponseEntity login(@RequestBody @Valid AuthDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
-
         var token = tokenService.generateToken((User) auth.getPrincipal());
+        User user = (User) auth.getPrincipal();
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.ok(new LoginResponseDTO(token, user.getName(), user.getUsername()));
     }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if(this.userRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
+        if(this.userRepository.findByLogin(data.login()) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new GlobalErrorMessage(HttpStatus.BAD_REQUEST, "Este email já está cadastrado"));
+        }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.name(),data.login(),encryptedPassword);
