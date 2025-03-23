@@ -18,13 +18,13 @@ public class CommitmentController {
     private CommitmentService commitmentService;
 
     @GetMapping("/expense/{expense_id}")
-    public ResponseEntity<List<Commitment>> findAllByExpense(@PathVariable UUID expense_id) {
+    public ResponseEntity<List<Commitment>> findAllByExpense(@PathVariable long expense_id) {
         List<Commitment> commitments = commitmentService.findAllByExpenseId(expense_id);
         return ResponseEntity.ok(commitments);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Commitment> findById(@PathVariable UUID id) {
+    public ResponseEntity<Commitment> findById(@PathVariable long id) {
         Commitment commitment = commitmentService.findById(id);
         return ResponseEntity.ok(commitment);
     }
@@ -35,7 +35,7 @@ public class CommitmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         commitmentService.delete(id);
         return ResponseEntity.noContent().build();
     }

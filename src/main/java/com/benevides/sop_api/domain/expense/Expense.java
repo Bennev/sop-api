@@ -15,8 +15,8 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 public class Expense {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Enumerated(EnumType.STRING)
     private ExpenseType type;

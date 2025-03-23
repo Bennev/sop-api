@@ -16,8 +16,8 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 public class Commitment {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     private Date date;
     private float value;

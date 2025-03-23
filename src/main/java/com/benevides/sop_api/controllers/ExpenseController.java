@@ -23,7 +23,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Expense> findById(@PathVariable UUID id) {
+    public ResponseEntity<Expense> findById(@PathVariable long id) {
         Expense expense = expenseService.findById(id);
         return ResponseEntity.ok(expense);
     }
@@ -34,7 +34,7 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         expenseService.delete(id);
         return ResponseEntity.noContent().build();
     }

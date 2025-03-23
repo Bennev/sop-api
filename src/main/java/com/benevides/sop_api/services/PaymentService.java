@@ -10,7 +10,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PaymentService {
@@ -19,11 +18,11 @@ public class PaymentService {
     @Autowired
     private CommitmentService commitmentService;
 
-    public List<Payment> findAllByCommitmentId(UUID commitment_id) {
+    public List<Payment> findAllByCommitmentId(long commitment_id) {
         return paymentRepository.findAllByCommitmentId(commitment_id);
     }
 
-    public Payment findById(UUID id) {
+    public Payment findById(long id) {
         return paymentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found"));
     }
@@ -43,7 +42,7 @@ public class PaymentService {
         return paymentRepository.save(payment);
     }
 
-    public void delete(UUID id) {
+    public void delete(long id) {
         Payment payment = paymentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Payment not found"));
 

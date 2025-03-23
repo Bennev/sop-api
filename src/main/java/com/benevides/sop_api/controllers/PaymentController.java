@@ -18,13 +18,13 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping("/commitment/{commitment_id}")
-    public ResponseEntity<List<Payment>> findAllByCommitmentId(@PathVariable UUID commitment_id) {
+    public ResponseEntity<List<Payment>> findAllByCommitmentId(@PathVariable long commitment_id) {
         List<Payment> payments = paymentService.findAllByCommitmentId(commitment_id);
         return ResponseEntity.ok(payments);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> findById(@PathVariable UUID id) {
+    public ResponseEntity<Payment> findById(@PathVariable long id) {
         Payment payment = paymentService.findById(id);
         return ResponseEntity.ok(payment);
     }
@@ -35,7 +35,7 @@ public class PaymentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+    public ResponseEntity<Void> delete(@PathVariable long id) {
         paymentService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -22,11 +22,11 @@ public class CommitmentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public List<Commitment> findAllByExpenseId(UUID expense_id) {
+    public List<Commitment> findAllByExpenseId(long expense_id) {
         return commitmentRepository.findAllByExpenseId((expense_id));
     }
 
-    public Commitment findById(UUID id) {
+    public Commitment findById(long id) {
         return commitmentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Commitment not found"));
     }
@@ -46,7 +46,7 @@ public class CommitmentService {
         return commitmentRepository.save(commitment);
     }
 
-    public void delete(UUID id) {
+    public void delete(long id) {
         Commitment commitment = commitmentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Commitment not found"));
 

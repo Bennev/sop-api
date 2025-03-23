@@ -1,7 +1,5 @@
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-
 CREATE TABLE expense (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     type VARCHAR(50) NOT NULL,
     protocol_date TIMESTAMP NOT NULL,
     due_date TIMESTAMP NOT NULL,
