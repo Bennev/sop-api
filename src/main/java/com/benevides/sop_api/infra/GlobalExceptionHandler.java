@@ -36,6 +36,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<GlobalErrorMessage> handleIllegalArgumentException(IllegalArgumentException exception) {
+        GlobalErrorMessage threatResponse = new GlobalErrorMessage(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GlobalErrorMessage> handleGenericException(Exception exception) {
         GlobalErrorMessage threatResponse = new GlobalErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Aconteceu um erro inesperado");

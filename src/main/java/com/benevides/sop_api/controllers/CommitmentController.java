@@ -5,11 +5,10 @@ import com.benevides.sop_api.domain.commitment.CreateCommitmentDTO;
 import com.benevides.sop_api.services.CommitmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("commitment")
@@ -18,8 +17,11 @@ public class CommitmentController {
     private CommitmentService commitmentService;
 
     @GetMapping("/expense/{expense_id}")
-    public ResponseEntity<List<Commitment>> findAllByExpense(@PathVariable long expense_id) {
-        List<Commitment> commitments = commitmentService.findAllByExpenseId(expense_id);
+    public ResponseEntity<Page<Commitment>> findAllPaginatedByExpense(
+            @PathVariable long expense_id,
+            @RequestParam(defaultValue = "0") int page
+    ) {
+        Page<Commitment> commitments = commitmentService.findAllPaginatedByExpenseId(expense_id, page);
         return ResponseEntity.ok(commitments);
     }
 
@@ -30,8 +32,9 @@ public class CommitmentController {
     }
 
     @PostMapping()
-    public Commitment create(@RequestBody @Valid CreateCommitmentDTO data) {
-        return commitmentService.create(data);
+    public ResponseEntity<Commitment> create(@RequestBody @Valid CreateCommitmentDTO data) {
+        Commitment commitment = commitmentService.create(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(commitment);
     }
 
     @DeleteMapping("/{id}")

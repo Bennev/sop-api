@@ -7,9 +7,10 @@ import com.benevides.sop_api.repositories.PaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PaymentService {
@@ -18,13 +19,14 @@ public class PaymentService {
     @Autowired
     private CommitmentService commitmentService;
 
-    public List<Payment> findAllByCommitmentId(long commitment_id) {
-        return paymentRepository.findAllByCommitmentId(commitment_id);
+    public Page<Payment> findAllByCommitmentId(long commitment_id, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return paymentRepository.findAllByCommitmentId(commitment_id, pageable);
     }
 
     public Payment findById(long id) {
         return paymentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Payment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
     }
 
     public Payment create(CreatePaymentDTO data) {
@@ -33,7 +35,7 @@ public class PaymentService {
         float totalPayments = paymentRepository.sumPaymentsByCommitmentId(commitment.getId());
 
         if(totalPayments + data.value() > commitment.getValue()) {
-            throw new DataIntegrityViolationException("The total value of payments exceeds the commitment value");
+            throw new DataIntegrityViolationException("O valor total dos pagamentos excede o valor do empenho");
         }
 
         Payment payment = new Payment(data.date(), data.value(), data.note());
@@ -44,7 +46,7 @@ public class PaymentService {
 
     public void delete(long id) {
         Payment payment = paymentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Payment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
 
         paymentRepository.deleteById(id);
     }

@@ -8,10 +8,10 @@ import com.benevides.sop_api.repositories.PaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CommitmentService {
@@ -22,13 +22,14 @@ public class CommitmentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public List<Commitment> findAllByExpenseId(long expense_id) {
-        return commitmentRepository.findAllByExpenseId((expense_id));
+    public Page<Commitment> findAllPaginatedByExpenseId(long expense_id, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        return commitmentRepository.findAllByExpenseId(expense_id, pageable);
     }
 
     public Commitment findById(long id) {
         return commitmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Commitment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Empenho não encontrado"));
     }
 
     public Commitment create(CreateCommitmentDTO data) {
@@ -37,7 +38,7 @@ public class CommitmentService {
         float totalCommitments = commitmentRepository.sumCommitmentsByExpenseId(expense.getId());
 
         if(totalCommitments + data.value() > expense.getValue()) {
-            throw new DataIntegrityViolationException("The total value of commitments exceeds the expense value");
+            throw new DataIntegrityViolationException("O valor total dos empenhos excede o valor da despesa");
         }
 
         Commitment commitment = new Commitment(data.date(), data.value(), data.note());
@@ -48,11 +49,11 @@ public class CommitmentService {
 
     public void delete(long id) {
         Commitment commitment = commitmentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Commitment not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Empenho não encontrado"));
 
         boolean hasPayments = paymentRepository.existsByCommitmentId(id);
         if (hasPayments) {
-            throw new DataIntegrityViolationException("Cannot delete Commitment with active Payments");
+            throw new DataIntegrityViolationException("Não é possível excluir empenho com pagamentos");
         }
         commitmentRepository.deleteById(id);
     }

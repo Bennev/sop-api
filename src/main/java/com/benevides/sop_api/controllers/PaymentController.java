@@ -5,11 +5,10 @@ import com.benevides.sop_api.domain.payment.Payment;
 import com.benevides.sop_api.services.PaymentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("payment")
@@ -18,8 +17,11 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping("/commitment/{commitment_id}")
-    public ResponseEntity<List<Payment>> findAllByCommitmentId(@PathVariable long commitment_id) {
-        List<Payment> payments = paymentService.findAllByCommitmentId(commitment_id);
+    public ResponseEntity<Page<Payment>> findAllByCommitmentId(
+            @PathVariable long commitment_id,
+            @RequestParam(defaultValue = "0") int page
+    ) {
+        Page<Payment> payments = paymentService.findAllByCommitmentId(commitment_id, page);
         return ResponseEntity.ok(payments);
     }
 
@@ -30,8 +32,9 @@ public class PaymentController {
     }
 
     @PostMapping()
-    public Payment create(@RequestBody @Valid CreatePaymentDTO data) {
-        return paymentService.create(data);
+    public ResponseEntity<Payment> create(@RequestBody @Valid CreatePaymentDTO data) {
+        Payment payment = paymentService.create(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(payment);
     }
 
     @DeleteMapping("/{id}")

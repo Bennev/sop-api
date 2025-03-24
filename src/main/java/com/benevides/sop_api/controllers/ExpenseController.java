@@ -5,11 +5,10 @@ import com.benevides.sop_api.domain.expense.Expense;
 import com.benevides.sop_api.services.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("expense")
@@ -18,8 +17,9 @@ public class ExpenseController {
     private ExpenseService expenseService;
 
     @GetMapping()
-    public List<Expense> findAll() {
-        return expenseService.findAll();
+    public ResponseEntity<Page<Expense>> findAllPaginated(@RequestParam(defaultValue = "0") int page) {
+        Page<Expense> expenses = expenseService.findAllPaginated(page);
+        return ResponseEntity.ok(expenses);
     }
 
     @GetMapping("/{id}")
@@ -28,9 +28,10 @@ public class ExpenseController {
         return ResponseEntity.ok(expense);
     }
 
-    @PostMapping()
-    public Expense create(@RequestBody @Valid CreateExpenseDTO data) {
-        return expenseService.create(data);
+    @PostMapping
+    public ResponseEntity<Expense> create(@RequestBody @Valid CreateExpenseDTO data) {
+        Expense expense = expenseService.create(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(expense);
     }
 
     @DeleteMapping("/{id}")
