@@ -30,7 +30,7 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthDTO data){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((User) auth.getPrincipal());
@@ -40,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
+    public ResponseEntity<GlobalErrorMessage> register(@RequestBody @Valid RegisterDTO data){
         if(this.userRepository.findByLogin(data.login()) != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new GlobalErrorMessage(HttpStatus.BAD_REQUEST, "Este email já está cadastrado"));

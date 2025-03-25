@@ -26,7 +26,7 @@ public class CommitmentService {
     private PaymentRepository paymentRepository;
 
     public Page<GetCommitmentsWithPaymentCountDTO> findAllWithPaymentCountByExpenseId(long expense_id, int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return commitmentRepository.findAllWithPaymentCountByExpenseId(expense_id, pageable);
     }
 
@@ -41,7 +41,7 @@ public class CommitmentService {
         float totalCommitments = commitmentRepository.sumCommitmentsByExpenseId(expense.getId());
 
         if(totalCommitments + data.value() > expense.getValue()) {
-            throw new DataIntegrityViolationException("O valor total dos empenhos excede o valor da despesa");
+            throw new DataIntegrityViolationException("Não é possível criar esse empenho, pois assim o valor total dos empenhos excede o valor da despesa");
         }
 
         Commitment commitment = new Commitment(data.date(), data.value(), data.note());

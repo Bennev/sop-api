@@ -21,7 +21,7 @@ public class PaymentService {
     private CommitmentService commitmentService;
 
     public Page<Payment> findAllByCommitmentId(long commitment_id, int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return paymentRepository.findAllByCommitmentId(commitment_id, pageable);
     }
 
@@ -36,7 +36,7 @@ public class PaymentService {
         float totalPayments = paymentRepository.sumPaymentsByCommitmentId(commitment.getId());
 
         if(totalPayments + data.value() > commitment.getValue()) {
-            throw new DataIntegrityViolationException("O valor total dos pagamentos excede o valor do empenho");
+            throw new DataIntegrityViolationException("Não é possível criar esse pagamento, pois assim o valor total dos pagamentos excede o valor do empenho");
         }
 
         Payment payment = new Payment(data.date(), data.value(), data.note());

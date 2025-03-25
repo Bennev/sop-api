@@ -23,7 +23,7 @@ public class ExpenseService {
     CommitmentRepository commitmentRepository;
 
     public Page<GetExpensesWithCommitmentCountDTO> findAllWithCommitmentCount(int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "id"));
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
         return expenseRepository.findAllWithCommitmentCount(pageable);
     }
 
