@@ -18,8 +18,15 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     private Date date;
+
+    @Column(nullable = false)
     private float value;
+
+    @Column(unique = true, nullable = false)
+    private String payment_number;
+
     private String note;
 
     @ManyToOne

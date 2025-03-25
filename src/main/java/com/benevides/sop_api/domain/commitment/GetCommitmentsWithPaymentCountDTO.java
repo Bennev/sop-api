@@ -7,6 +7,7 @@ public record GetCommitmentsWithPaymentCountDTO(
         Date date,
         float value,
         String note,
+        String commitment_number,
         long payment_count
 ) {
 }

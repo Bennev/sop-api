@@ -39,8 +39,10 @@ public class PaymentService {
             throw new DataIntegrityViolationException("Não é possível criar esse pagamento, pois assim o valor total dos pagamentos excede o valor do empenho");
         }
 
+        String paymentNumber = generatePaymentNumber();
         Payment payment = new Payment(data.date(), data.value(), data.note());
         payment.setCommitment(commitment);
+        payment.setPayment_number(paymentNumber);
 
         return paymentRepository.save(payment);
     }
@@ -50,5 +52,11 @@ public class PaymentService {
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
 
         paymentRepository.deleteById(id);
+    }
+
+    private String generatePaymentNumber() {
+        String year = String.valueOf(java.time.Year.now().getValue());
+        long nextSequence = paymentRepository.findMaxPaymentSequenceByYear(year) + 1;
+        return "%sNP%04d".formatted(year, nextSequence);
     }
 }

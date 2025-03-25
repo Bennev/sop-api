@@ -1,0 +1,2 @@
+ALTER TABLE commitment
+ADD COLUMN commitment_number VARCHAR(50) NOT NULL UNIQUE;

@@ -1,0 +1,5 @@
+ALTER TABLE payment
+DROP COLUMN IF EXISTS payment_number;
+
+ALTER TABLE payment
+ADD COLUMN payment_number VARCHAR(50) NOT NULL UNIQUE;

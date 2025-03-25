@@ -4,7 +4,6 @@ import com.benevides.sop_api.domain.commitment.Commitment;
 import com.benevides.sop_api.domain.commitment.CreateCommitmentDTO;
 import com.benevides.sop_api.domain.commitment.GetCommitmentsWithPaymentCountDTO;
 import com.benevides.sop_api.domain.expense.Expense;
-import com.benevides.sop_api.domain.expense.GetExpensesWithCommitmentCountDTO;
 import com.benevides.sop_api.repositories.CommitmentRepository;
 import com.benevides.sop_api.repositories.PaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -44,8 +43,10 @@ public class CommitmentService {
             throw new DataIntegrityViolationException("Não é possível criar esse empenho, pois assim o valor total dos empenhos excede o valor da despesa");
         }
 
+        String commitmentNumber = generateCommitmentNumber();
         Commitment commitment = new Commitment(data.date(), data.value(), data.note());
         commitment.setExpense(expense);
+        commitment.setCommitment_number(commitmentNumber);
 
         return commitmentRepository.save(commitment);
     }
@@ -59,5 +60,11 @@ public class CommitmentService {
             throw new DataIntegrityViolationException("Não é possível excluir empenho com pagamentos");
         }
         commitmentRepository.deleteById(id);
+    }
+
+    private String generateCommitmentNumber() {
+        String year = String.valueOf(java.time.Year.now().getValue());
+        long nextSequence = commitmentRepository.findMaxCommitmentSequenceByYear(year) + 1;
+        return "%sNE%04d".formatted(year, nextSequence);
     }
 }

@@ -10,6 +10,7 @@ public record GetExpensesWithCommitmentCountDTO(
         String creditor,
         String description,
         float value,
+        String protocol_number,
         long commitment_count
 ) {
 }

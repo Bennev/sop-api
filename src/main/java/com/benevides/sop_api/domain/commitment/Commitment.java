@@ -21,8 +21,15 @@ public class Commitment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     private Date date;
+
+    @Column(nullable = false)
     private float value;
+
+    @Column(unique = true, nullable = false)
+    private String commitment_number;
+
     private String note;
 
     @OneToMany(mappedBy = "commitment", fetch = FetchType.LAZY)

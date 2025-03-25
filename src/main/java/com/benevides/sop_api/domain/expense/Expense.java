@@ -20,13 +20,26 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ExpenseType type;
+
+    @Column(nullable = false)
     private Date protocol_date;
+
+    @Column(nullable = false)
     private Date due_date;
+
+    @Column(nullable = false)
     private String creditor;
-    private String description;
+
+    @Column(nullable = false)
     private float value;
+
+    @Column(unique = true, nullable = false)
+    private String protocol_number;
+
+    private String description;
 
     @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY)
     @JsonIgnore

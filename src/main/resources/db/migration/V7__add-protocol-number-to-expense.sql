@@ -1,0 +1,2 @@
+ALTER TABLE expense
+ADD COLUMN protocol_number VARCHAR(50) NOT NULL UNIQUE;

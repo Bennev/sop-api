@@ -39,8 +39,10 @@ public class ExpenseService {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Tipo de despesa inválido");
         }
-        Expense newExpense = new Expense(expenseType,data.protocol_date(),data.due_date(),data.creditor(),data.description(),data.value());
-        return expenseRepository.save(newExpense);
+        String protocolNumber = generateProtocolNumber();
+        Expense expense = new Expense(expenseType,data.protocol_date(),data.due_date(),data.creditor(),data.description(),data.value());
+        expense.setProtocol_number(protocolNumber);
+        return expenseRepository.save(expense);
     }
 
     public void delete(long id) {
@@ -53,5 +55,13 @@ public class ExpenseService {
         }
 
         expenseRepository.deleteById(id);
+    }
+
+    private String generateProtocolNumber() {
+        String yearMonth = java.time.YearMonth.now().toString();
+        Long maxSequence = expenseRepository.findMaxProtocolSequenceByMonth(yearMonth);
+        long nextSequence = (maxSequence != null ? maxSequence : 0) + 1;
+
+        return "43022.%06d/%s".formatted(nextSequence, yearMonth);
     }
 }
