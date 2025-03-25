@@ -2,6 +2,7 @@ package com.benevides.sop_api.controllers;
 
 import com.benevides.sop_api.domain.expense.CreateExpenseDTO;
 import com.benevides.sop_api.domain.expense.Expense;
+import com.benevides.sop_api.domain.expense.GetExpensesWithCommitmentCountDTO;
 import com.benevides.sop_api.services.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,9 @@ public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
-    @GetMapping()
-    public ResponseEntity<Page<Expense>> findAllPaginated(@RequestParam(defaultValue = "0") int page) {
-        Page<Expense> expenses = expenseService.findAllPaginated(page);
+    @GetMapping
+    public ResponseEntity<Page<GetExpensesWithCommitmentCountDTO>> findAllWithCommitmentCount(@RequestParam(defaultValue = "0") int page) {
+        Page<GetExpensesWithCommitmentCountDTO> expenses = expenseService.findAllWithCommitmentCount(page);
         return ResponseEntity.ok(expenses);
     }
 

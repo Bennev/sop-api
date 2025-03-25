@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +21,7 @@ public class PaymentService {
     private CommitmentService commitmentService;
 
     public Page<Payment> findAllByCommitmentId(long commitment_id, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "id"));
         return paymentRepository.findAllByCommitmentId(commitment_id, pageable);
     }
 

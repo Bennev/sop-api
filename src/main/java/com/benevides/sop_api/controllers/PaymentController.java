@@ -31,7 +31,7 @@ public class PaymentController {
         return ResponseEntity.ok(payment);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Payment> create(@RequestBody @Valid CreatePaymentDTO data) {
         Payment payment = paymentService.create(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(payment);

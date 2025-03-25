@@ -1,10 +1,12 @@
 package com.benevides.sop_api.domain.expense;
 
+import com.benevides.sop_api.domain.commitment.Commitment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
 
 @Table(name = "expense")
 @Entity(name = "expense")
@@ -25,6 +27,10 @@ public class Expense {
     private String creditor;
     private String description;
     private float value;
+
+    @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Commitment> commitments;
 
     public Expense(ExpenseType type, Date protocol_date, Date due_date, String creditor, String description, float value) {
         this.type = type;

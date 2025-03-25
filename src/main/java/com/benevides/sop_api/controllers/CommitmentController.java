@@ -2,6 +2,7 @@ package com.benevides.sop_api.controllers;
 
 import com.benevides.sop_api.domain.commitment.Commitment;
 import com.benevides.sop_api.domain.commitment.CreateCommitmentDTO;
+import com.benevides.sop_api.domain.commitment.GetCommitmentsWithPaymentCountDTO;
 import com.benevides.sop_api.services.CommitmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,11 @@ public class CommitmentController {
     private CommitmentService commitmentService;
 
     @GetMapping("/expense/{expense_id}")
-    public ResponseEntity<Page<Commitment>> findAllPaginatedByExpense(
+    public ResponseEntity<Page<GetCommitmentsWithPaymentCountDTO>> findAllWithPaymentCountByExpenseId(
             @PathVariable long expense_id,
             @RequestParam(defaultValue = "0") int page
     ) {
-        Page<Commitment> commitments = commitmentService.findAllPaginatedByExpenseId(expense_id, page);
+        Page<GetCommitmentsWithPaymentCountDTO> commitments = commitmentService.findAllWithPaymentCountByExpenseId(expense_id, page);
         return ResponseEntity.ok(commitments);
     }
 
@@ -31,7 +32,7 @@ public class CommitmentController {
         return ResponseEntity.ok(commitment);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Commitment> create(@RequestBody @Valid CreateCommitmentDTO data) {
         Commitment commitment = commitmentService.create(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(commitment);

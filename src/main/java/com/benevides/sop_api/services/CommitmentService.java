@@ -2,7 +2,9 @@ package com.benevides.sop_api.services;
 
 import com.benevides.sop_api.domain.commitment.Commitment;
 import com.benevides.sop_api.domain.commitment.CreateCommitmentDTO;
+import com.benevides.sop_api.domain.commitment.GetCommitmentsWithPaymentCountDTO;
 import com.benevides.sop_api.domain.expense.Expense;
+import com.benevides.sop_api.domain.expense.GetExpensesWithCommitmentCountDTO;
 import com.benevides.sop_api.repositories.CommitmentRepository;
 import com.benevides.sop_api.repositories.PaymentRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,9 +25,9 @@ public class CommitmentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public Page<Commitment> findAllPaginatedByExpenseId(long expense_id, int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return commitmentRepository.findAllByExpenseId(expense_id, pageable);
+    public Page<GetCommitmentsWithPaymentCountDTO> findAllWithPaymentCountByExpenseId(long expense_id, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "id"));
+        return commitmentRepository.findAllWithPaymentCountByExpenseId(expense_id, pageable);
     }
 
     public Commitment findById(long id) {

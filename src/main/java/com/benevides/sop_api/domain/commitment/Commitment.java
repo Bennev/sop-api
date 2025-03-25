@@ -1,11 +1,13 @@
 package com.benevides.sop_api.domain.commitment;
 
 import com.benevides.sop_api.domain.expense.Expense;
+import com.benevides.sop_api.domain.payment.Payment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
 
 @Table(name = "commitment")
 @Entity(name = "commitment")
@@ -22,6 +24,10 @@ public class Commitment {
     private Date date;
     private float value;
     private String note;
+
+    @OneToMany(mappedBy = "commitment", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Payment> payments;
 
     @ManyToOne
     @JoinColumn(name = "expense_id")

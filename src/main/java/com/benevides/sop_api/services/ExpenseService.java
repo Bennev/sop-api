@@ -3,6 +3,7 @@ package com.benevides.sop_api.services;
 import com.benevides.sop_api.domain.expense.CreateExpenseDTO;
 import com.benevides.sop_api.domain.expense.Expense;
 import com.benevides.sop_api.domain.expense.ExpenseType;
+import com.benevides.sop_api.domain.expense.GetExpensesWithCommitmentCountDTO;
 import com.benevides.sop_api.repositories.CommitmentRepository;
 import com.benevides.sop_api.repositories.ExpenseRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,9 +22,9 @@ public class ExpenseService {
     @Autowired
     CommitmentRepository commitmentRepository;
 
-    public Page<Expense> findAllPaginated(int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return expenseRepository.findAll(pageable);
+    public Page<GetExpensesWithCommitmentCountDTO> findAllWithCommitmentCount(int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "id"));
+        return expenseRepository.findAllWithCommitmentCount(pageable);
     }
 
     public Expense findById(long id) {
