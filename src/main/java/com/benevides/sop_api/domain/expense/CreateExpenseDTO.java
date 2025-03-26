@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public record CreateExpenseDTO(
@@ -24,6 +25,6 @@ public record CreateExpenseDTO(
         String description,
 
         @Positive(message = "O valor é obrigatório e deve ser maior que zero")
-        float value
+        BigDecimal value
 ) {
 }

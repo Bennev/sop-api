@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     @Query("SELECT new com.benevides.sop_api.domain.expense.GetExpensesWithCommitmentCountDTO(e.id, e.type, e.protocol_date, e.due_date, " +
-            "e.creditor, e.description, e.value, e.protocol_number, COALESCE(COUNT(c), 0)) " +
+            "e.creditor, e.description, e.value, e.protocol_number, e.status, COALESCE(COUNT(c), 0)) " +
             "FROM expense e LEFT JOIN e.commitments c " +
             "GROUP BY e.id")
     Page<GetExpensesWithCommitmentCountDTO> findAllWithCommitmentCount(Pageable pageable);

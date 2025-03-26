@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class CommitmentService {
     @Autowired
@@ -37,9 +39,9 @@ public class CommitmentService {
     public Commitment create(CreateCommitmentDTO data) {
         Expense expense = expenseService.findById(data.expense_id());
 
-        float totalCommitments = commitmentRepository.sumCommitmentsByExpenseId(expense.getId());
+        BigDecimal totalCommitments = commitmentRepository.sumCommitmentsByExpenseId(expense.getId());
 
-        if(totalCommitments + data.value() > expense.getValue()) {
+        if(totalCommitments.add(data.value()).compareTo(expense.getValue()) > 0) {
             throw new DataIntegrityViolationException("Não é possível criar esse empenho, pois assim o valor total dos empenhos excede o valor da despesa");
         }
 
@@ -48,7 +50,11 @@ public class CommitmentService {
         commitment.setExpense(expense);
         commitment.setCommitment_number(commitmentNumber);
 
-        return commitmentRepository.save(commitment);
+        Commitment savedCommitment = commitmentRepository.save(commitment);
+
+        expenseService.updateStatus(expense.getId());
+
+        return savedCommitment;
     }
 
     public void delete(long id) {
@@ -60,6 +66,7 @@ public class CommitmentService {
             throw new DataIntegrityViolationException("Não é possível excluir empenho com pagamentos");
         }
         commitmentRepository.deleteById(id);
+        expenseService.updateStatus(commitment.getExpense().getId());
     }
 
     private String generateCommitmentNumber() {

@@ -13,12 +13,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
     @Autowired
     private CommitmentService commitmentService;
+    @Autowired
+    private ExpenseService expenseService;
 
     public Page<Payment> findAllByCommitmentId(long commitment_id, int page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id"));
@@ -33,9 +37,9 @@ public class PaymentService {
     public Payment create(CreatePaymentDTO data) {
         Commitment commitment = commitmentService.findById(data.commitment_id());
 
-        float totalPayments = paymentRepository.sumPaymentsByCommitmentId(commitment.getId());
+        BigDecimal totalPayments = paymentRepository.sumPaymentsByCommitmentId(commitment.getId());
 
-        if(totalPayments + data.value() > commitment.getValue()) {
+        if(totalPayments.add(data.value()).compareTo(commitment.getValue()) > 0) {
             throw new DataIntegrityViolationException("Não é possível criar esse pagamento, pois assim o valor total dos pagamentos excede o valor do empenho");
         }
 
@@ -44,7 +48,11 @@ public class PaymentService {
         payment.setCommitment(commitment);
         payment.setPayment_number(paymentNumber);
 
-        return paymentRepository.save(payment);
+        Payment savedPayment = paymentRepository.save(payment);
+
+        expenseService.updateStatus(commitment.getExpense().getId());
+
+        return savedPayment;
     }
 
     public void delete(long id) {
@@ -52,6 +60,7 @@ public class PaymentService {
                 .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
 
         paymentRepository.deleteById(id);
+        expenseService.updateStatus(payment.getCommitment().getExpense().getId());
     }
 
     private String generatePaymentNumber() {

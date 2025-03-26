@@ -1,5 +1,6 @@
 package com.benevides.sop_api.domain.expense;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public record GetExpensesWithCommitmentCountDTO(
@@ -9,8 +10,9 @@ public record GetExpensesWithCommitmentCountDTO(
         Date due_date,
         String creditor,
         String description,
-        float value,
+        BigDecimal value,
         String protocol_number,
+        ExpenseStatus status,
         long commitment_count
 ) {
 }

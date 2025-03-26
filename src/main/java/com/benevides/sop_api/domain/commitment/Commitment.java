@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +28,7 @@ public class Commitment {
     private Date date;
 
     @Column(nullable = false)
-    private float value;
+    private BigDecimal value;
 
     @Column(unique = true, nullable = false)
     private String commitment_number;
@@ -34,15 +37,15 @@ public class Commitment {
 
     @OneToMany(mappedBy = "commitment", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Payment> payments;
+    private List<Payment> payments = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "expense_id")
     private Expense expense;
 
-    public Commitment(Date date, float value, String note) {
+    public Commitment(Date date, BigDecimal value, String note) {
         this.date = date;
-        this.value = value;
+        this.value = value.setScale(2, RoundingMode.HALF_UP);
         this.note = note;
     }
 }

@@ -4,6 +4,8 @@ import com.benevides.sop_api.domain.commitment.Commitment;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Table(name = "payment")
@@ -22,7 +24,7 @@ public class Payment {
     private Date date;
 
     @Column(nullable = false)
-    private float value;
+    private BigDecimal value;
 
     @Column(unique = true, nullable = false)
     private String payment_number;
@@ -33,9 +35,9 @@ public class Payment {
     @JoinColumn(name = "commitment_id")
     private Commitment commitment;
 
-    public Payment(Date date, float value, String note){
+    public Payment(Date date, BigDecimal value, String note){
         this.date = date;
-        this.value = value;
+        this.value = value.setScale(2, RoundingMode.HALF_UP);
         this.note = note;
     }
 }
