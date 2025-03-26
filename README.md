@@ -11,6 +11,7 @@ Este é um projeto desenvolvido para um teste técnico. Trata-se de uma API REST
 - [🚀 Tecnologias Utilizadas](#-tecnologias-utilizadas)
 - [📦 Como Executar o Projeto](#-como-executar-o-projeto)
 - [🛠 Endpoints da API](#-endpoints-da-api)
+- [🔗 Link do Deploy](#-link-do-deploy)
 - [👨‍💻 Autor](#-autor)
 
 ---
@@ -40,19 +41,13 @@ As relações entre as entidades **Expense**, **Commitment** e **Payment** segue
 
 ---
 
-## 🔗 Link do Deploy
-
-- **Live Site URL**: [@Render](https://sop-api.onrender.com)  
-
----
-
 ## 🚀 Tecnologias Utilizadas
 
 Este projeto foi desenvolvido com as seguintes tecnologias:
 
 - **Java 21**
 - **Spring Boot 3.4.4**
-- **Spring Data JPA** (Hibernate)
+- **Spring Data JPA**
 - **PostgreSQL**
 - **Flyway**
 - **Spring Security**
@@ -101,6 +96,8 @@ Antes de iniciar, você precisará ter instalado:
     ```sh
     http://localhost:8080
 
+---
+
 ## 🛠 Endpoints da API
 
 ### 🔹 **Users (Autenticação)**
@@ -132,6 +129,14 @@ Antes de iniciar, você precisará ter instalado:
 | `GET`  | `/payment/{id}`                    | Busca um pagamento específico                           |
 | `POST` | `/payment`                         | Cria um novo pagamento                                  |
 | `DELETE` | `/payment/{id}`                    | Remove um pagamento  |
+
+---
+
+## 🔗 Link do Deploy
+
+- **Live Site URL**: [@Render](https://sop-api.onrender.com)
+
+---
 
 ## 👨‍💻 Autor
 
