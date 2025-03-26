@@ -40,6 +40,12 @@ As relações entre as entidades **Expense**, **Commitment** e **Payment** segue
 
 ---
 
+## 🔗 Link do Deploy
+
+- **Live Site URL**: [@Render](https://sop-api.onrender.com)  
+
+---
+
 ## 🚀 Tecnologias Utilizadas
 
 Este projeto foi desenvolvido com as seguintes tecnologias:
@@ -64,7 +70,7 @@ Antes de iniciar, você precisará ter instalado:
 - **Java 21**
 - **Maven**
 - **PostgreSQL**
-- **Docker** (opcional, caso queira rodar o banco via container)
+- **Docker** (opcional, caso queira rodar a API via container)
 
 ### 🚀 Rodando a aplicação
 
@@ -85,7 +91,7 @@ Antes de iniciar, você precisará ter instalado:
     spring.datasource.password=${DATABASE_PASSWORD:soq_password}
     server.port=${PORT:8080}
    
-4. (Opcional) Se desejar testar via deploy, crie um arquivo chamado .env na raiz do projeto e cole as informações que enviarei separadamente.
+4. (Opcional) Caso deseje testar a aplicação via deploy, crie um arquivo chamado `.env` na raiz do projeto e adicione as informações do banco de dados, que serão enviadas separadamente.
 
 5. Rode o projeto com Maven:
     ```sh
