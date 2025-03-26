@@ -136,6 +136,8 @@ Antes de iniciar, você precisará ter instalado:
 
 - **Live Site URL**: [@Render](https://sop-api.onrender.com)
 
+> ⚠️ **Aviso:** Recomenda-se rodar a aplicação em ambiente local, visto que os deploys realizados de forma gratuita nessas plataformas costumam possuir muitas limitações e também apresentam lentidão.
+
 ---
 
 ## 👨‍💻 Autor
