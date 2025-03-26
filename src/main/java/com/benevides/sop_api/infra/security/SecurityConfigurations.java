@@ -1,6 +1,7 @@
 package com.benevides.sop_api.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,9 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurations {
+    @Value("${APP_URL:http://localhost:3000}")
+    private String appUrl;
+
     @Autowired
     SecurityFilter securityFilter;
 
@@ -57,7 +61,7 @@ public class SecurityConfigurations {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // Permite chamadas do frontend
+        config.setAllowedOrigins(List.of(appUrl));
         config.setAllowedMethods(List.of("GET", "POST", "DELETE", "PUT", "OPTIONS"));
         config.setAllowedHeaders(List.of(HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION));
 
