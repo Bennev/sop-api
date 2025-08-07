@@ -53,6 +53,7 @@ Este projeto foi desenvolvido com as seguintes tecnologias:
 - **Spring Security**
 - **JWT (JSON Web Token)**
 - **Lombok**
+- **OpenAPI**
 
 ---
 
@@ -80,10 +81,10 @@ Antes de iniciar, você precisará ter instalado:
 3. Crie um banco de dados no PostgreSQL e configure as credenciais no application.properties conforme os dados do seu ambiente local. Exemplo:
     ```sh
     api.security.token.secret=${JWT_SECRET:my-secret-key}
-    spring.datasource.url=${DATABASE_URL:jdbc:postgresql://localhost:5432/soq}
+    spring.datasource.url=${DATABASE_URL:jdbc:postgresql://localhost:5432/sop}
     spring.application.name=${DATABASE_NAME:sop-api}
-    spring.datasource.username=${DATABASE_USER:soq_user}
-    spring.datasource.password=${DATABASE_PASSWORD:soq_password}
+    spring.datasource.username=${DATABASE_USER:sop_user}
+    spring.datasource.password=${DATABASE_PASSWORD:sop_password}
     server.port=${PORT:8080}
    
 4. (Opcional) Caso deseje testar a aplicação via deploy, crie um arquivo chamado `.env` na raiz do projeto e adicione as informações do banco de dados, que serão enviadas separadamente.
