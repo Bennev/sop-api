@@ -7,6 +7,8 @@ import com.benevides.sop_api.domain.user.User;
 import com.benevides.sop_api.infra.GlobalErrorMessage;
 import com.benevides.sop_api.infra.security.TokenService;
 import com.benevides.sop_api.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = ".:Autenticação:.")
 @RestController
 @RequestMapping("auth")
 public class AuthController {
@@ -30,6 +33,9 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/login")
+    @Operation(
+            description = "Este método irá autenticar o usuário e retornar o token JWT"
+    )
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
@@ -40,6 +46,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(
+            description = "Este método irá cadastrar um novo usuário"
+    )
     public ResponseEntity<GlobalErrorMessage> register(@RequestBody @Valid RegisterDTO data){
         if(this.userRepository.findByLogin(data.login()) != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
